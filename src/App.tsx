@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { useAppControl } from './state/AppControlContext';
 import { AvailableStateManagerType } from './types/global';
 import ControlPanel from './components/ControlPanel';
@@ -22,7 +22,15 @@ const renderSelectedExample = (option: AvailableStateManagerType, gridSize: numb
 
 
 function App() {
-  const { selectedStateManager, gridSize } = useAppControl();
+  const { appConfig } = useAppControl();
+
+  useEffect(() => {
+    console.log('App mounted');
+  }, []);
+
+  useEffect(() => {
+    console.log('App updated appConfig');
+  }, [appConfig]);
 
   return (
     <div style={{
@@ -35,7 +43,7 @@ function App() {
       <ControlPanel />
 
       <Suspense fallback={<div>Loading...</div>}>
-        {renderSelectedExample(selectedStateManager, gridSize)}
+        {renderSelectedExample(appConfig.selectedStateManager, appConfig.gridSize)}
       </Suspense>
     </div>
   );

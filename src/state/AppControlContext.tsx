@@ -1,27 +1,22 @@
 import { createContext, useContext, useState, ReactNode, Dispatch, SetStateAction } from 'react';
-import { AvailableStateManagerType } from 'types/global';
+import { AppConfig } from 'types/global';
+import { initAppConfig } from './initState.ts';
 
 export interface AppControlContextValue {
-  selectedStateManager: AvailableStateManagerType;
-  setSelectedStateManager: (stateManager: AvailableStateManagerType) => void;
-  gridSize: number;
-  setGridSize: Dispatch<SetStateAction<number>>;
+  appConfig: AppConfig;
+  setAppConfig: Dispatch<SetStateAction<AppConfig>>;
 }
 
 export const AppControlContext = createContext<AppControlContextValue>({
-  selectedStateManager: 'None',
-  setSelectedStateManager: () => {
-  },
-  gridSize: 10,
-  setGridSize: () => {
+  appConfig: { ...initAppConfig },
+  setAppConfig: () => {
   }
 });
 
 export const AppControlProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedStateManager, setSelectedStateManager] = useState<AvailableStateManagerType>('None');
-  const [gridSize, setGridSize] = useState<number>(10);
+  const [appConfig, setAppConfig] = useState<AppConfig>({ ...initAppConfig });
 
-  const appControlContextValue = { selectedStateManager, setSelectedStateManager, gridSize, setGridSize };
+  const appControlContextValue = { appConfig, setAppConfig };
 
   return (
     <AppControlContext.Provider value={appControlContextValue}>

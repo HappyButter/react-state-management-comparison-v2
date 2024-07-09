@@ -2,7 +2,7 @@
   width: calc(100vw - 40px);
   display: flex;
   align-items: center;
-  flex-direction: column;
+  flex-direction: row;
   padding: 16px;
   background-color: #171717;
   border-radius: 20px;
