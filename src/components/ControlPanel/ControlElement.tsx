@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 
-const ControlElement = ({ children, title }: { children: ReactNode, title: string }) => {
+const ControlElement = ({ children, title }: { children: ReactNode, title?: string }) => {
   return (
     <div id="control-panel-element">
       <div>
-        {title}
+        {title ?? ''}
       </div>
       <div>
         {children}
