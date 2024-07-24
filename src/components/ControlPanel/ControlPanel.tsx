@@ -22,6 +22,29 @@ const measureInteraction = () => {
   };
 };
 
+type MeasurementResultProps = {
+  toMeasure: () => void;
+  setResult: (result: number) => void;
+}
+
+const measureInteractionAndSetResult = ({
+                                          toMeasure = () => {
+                                          },
+                                          setResult = () => {
+                                          }
+                                        }: MeasurementResultProps) => {
+
+  const interaction = measureInteraction();
+
+  toMeasure();
+
+  afterFrame(() => {
+    const res = interaction.end();
+    console.log('Interaction took', res, 'ms');
+    setResult(res);
+  });
+};
+
 function parseIntOrReturnValue(x: string): number | string {
   const parsed = Number.parseInt(x);
   if (Number.isNaN(parsed)) {
@@ -36,17 +59,6 @@ const ControlPanel = () => {
   const [measurementResult, setMeasurementResult] = useState<number>(0);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const measureInteractionAndSetResult = (cb: () => void) => {
-
-    const interaction = measureInteraction();
-
-    cb();
-
-    afterFrame(() => {
-      setMeasurementResult(interaction.end());
-    });
-  };
-
   return (
     <menu id="control-panel-wrapper">
 
@@ -54,27 +66,29 @@ const ControlPanel = () => {
         <h1 style={{ textAlign: 'center' }}>Control Panel</h1>
 
         <form
-          id="control-panel-content"
+          id="control-panel"
           ref={formRef}
           onSubmit={(e) => {
             e.preventDefault();
 
             if (formRef && formRef.current) {
-              const entries = new FormData(formRef.current).entries();
-              const formDataParsed = (Object.fromEntries(entries) as never) as AppConfig;
+              measureInteractionAndSetResult({
+                toMeasure: () => {
+                  const entries = new FormData(formRef.current ?? undefined).entries();
+                  const formDataParsed = (Object.fromEntries(entries) as never) as AppConfig;
 
-              const result: AppConfig = { ...initAppConfig };
-              for (const entry of Object.entries(formDataParsed)) {
-                const [key, value] = entry as [string, string];
-                // @ts-ignore
-                result[key as keyof AppConfig] = parseIntOrReturnValue(value);
-              }
+                  const result: AppConfig = { ...initAppConfig };
+                  for (const entry of Object.entries(formDataParsed)) {
+                    const [key, value] = entry as [string, string];
+                    // @ts-ignore
+                    result[key as keyof AppConfig] = parseIntOrReturnValue(value);
+                  }
 
-              setAppConfig(result);
+                  setAppConfig(result);
+                },
+                setResult: setMeasurementResult
+              });
             }
-            measureInteractionAndSetResult(() => {
-              console.log('submitting form');
-            });
           }}>
           <ControlElement title="State Manager:">
             <select name="selectedStateManager">
@@ -98,7 +112,6 @@ const ControlPanel = () => {
                    value="Reset"
                    onClick={() => {
                      setAppConfig(initAppConfig);
-
                    }}
                    style={{
                      margin: '4px',

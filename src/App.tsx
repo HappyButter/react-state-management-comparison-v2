@@ -1,11 +1,12 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useAppControl } from './state/AppControlContext';
 import { AvailableStateManagerType } from './types/global';
 import ControlPanel from './components/ControlPanel';
 
-// import ContextApp from 'modules/ContextApp';
-const ContextApp = lazy(() => import('modules/ContextApp'));
-const ZustandApp = lazy(() => import('modules/ZustandApp'));
+import ContextApp from 'modules/ContextApp';
+import ZustandApp from 'modules/ZustandApp';
+// const ContextApp = lazy(() => import('modules/ContextApp'));
+// const ZustandApp = lazy(() => import('modules/ZustandApp'));
 
 const renderSelectedExample = (option: AvailableStateManagerType, gridSize: number) => {
   switch (option) {

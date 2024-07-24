@@ -9,7 +9,7 @@
   margin: 20px ;
 }
 
-#control-panel-content {
+#control-panel {
   display: flex;
   flex-direction: column;
 }
