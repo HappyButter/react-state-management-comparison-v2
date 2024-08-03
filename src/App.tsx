@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
 import { useAppControl } from './state/AppControlContext';
 import { AvailableStateManagerType } from './types/global';
 import ControlPanel from './components/ControlPanel';
@@ -24,14 +24,6 @@ const renderSelectedExample = (option: AvailableStateManagerType, gridSize: numb
 
 function App() {
   const { appConfig } = useAppControl();
-
-  useEffect(() => {
-    console.log('App mounted');
-  }, []);
-
-  useEffect(() => {
-    console.log('App updated appConfig');
-  }, [appConfig]);
 
   return (
     <div style={{

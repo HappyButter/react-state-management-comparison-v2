@@ -1,12 +1,30 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './pages/page';
 
 test.describe('Performance tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:3000/');
   });
 
-  test('has title', async ({ page }) => {
-    await expect(page).toHaveTitle(/ManageState/);
+  test('ContextAPI', async ({ mainPage }) => {
+    await expect(mainPage.page).toHaveTitle(/ManageState/);
+
+    // Start measuring the performance.
+    // await page.evaluate(() => performance.mark('start'));
+    // Click the button.
+
+    await mainPage.fillConfigurations('ContextAPI', 300);
+    await mainPage.applyButton.click();
+    await mainPage.waitForPixels();
+
+    // const paintMetrics = await mainPage.page.evaluate(() => performance.getEntriesByType('paint'));
+    // console.log('Paint Metrics:', paintMetrics);
+
+    // const longTaskObserver = new PerformanceObserver((entryList) => {
+    //   const longTasks = entryList.getEntries();
+    //   console.log('Long Tasks:', longTasks);
+    // });
+    //
+    // longTaskObserver.observe({ type: 'longtask' });
   });
 
   // test('Reset control panel', async ({ page }) => {

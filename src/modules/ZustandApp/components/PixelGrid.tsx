@@ -15,7 +15,7 @@ const styles: CSSProperties = {
 
 const PixelGrid = ({size}: PixelGridProps) => {
   return (
-    <div style={{ ...styles }}>
+    <div style={{ ...styles }} data-testid="pixel-grid" >
       {Array(size)
         .fill(null)
         .map((_, rowIndex) => (
