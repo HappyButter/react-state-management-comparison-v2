@@ -1,49 +1,14 @@
 import { useRef, useState } from 'react';
-import afterFrame from 'afterframe';
 import { AppConfig, availableStateManagers } from 'types/global';
 import { useAppControl } from '../../state/AppControlContext';
 import ControlElement from './ControlElement';
+import { measureInteraction } from '../../common/measureInteraction.ts';
 
 import './styles.css';
 import { initAppConfig } from '../../state/initState.ts';
+import Emitter from '../../common/emitter.ts';
+import { EmitterEvents } from '../../common/emitter.ts';
 
-const measureInteraction = () => {
-  // performance.now() returns the number of ms
-  // elapsed since the page was opened
-  const startTimestamp = performance.now();
-
-  return {
-    end(): number {
-      const endTimestamp = performance.now();
-      console.log('Afterframe the interaction took', endTimestamp - startTimestamp, 'ms');
-
-      return endTimestamp - startTimestamp;
-    }
-  };
-};
-
-type MeasurementResultProps = {
-  toMeasure: () => void;
-  setResult: (result: number) => void;
-}
-
-const measureInteractionAndSetResult = ({
-                                          toMeasure = () => {
-                                          },
-                                          setResult = () => {
-                                          }
-                                        }: MeasurementResultProps) => {
-
-  const interaction = measureInteraction();
-
-  toMeasure();
-
-  afterFrame(() => {
-    const res = interaction.end();
-    console.log('Interaction took', res, 'ms');
-    setResult(res);
-  });
-};
 
 function parseIntOrReturnValue(x: string): number | string {
   const parsed = Number.parseInt(x);
@@ -72,7 +37,7 @@ const ControlPanel = () => {
             e.preventDefault();
 
             if (formRef && formRef.current) {
-              measureInteractionAndSetResult({
+              measureInteraction({
                 toMeasure: () => {
                   const entries = new FormData(formRef.current ?? undefined).entries();
                   const formDataParsed = (Object.fromEntries(entries) as never) as AppConfig;
@@ -99,6 +64,27 @@ const ControlPanel = () => {
               ))}
             </select>
           </ControlElement>
+
+          <ControlElement>
+            <button data-testid="drawRandomPixel"
+                    name="drawRandomPixel"
+                    style={{ textAlign: 'right' }}
+                    onClick={() => {
+                      Emitter.emit(EmitterEvents.DRAW_RANDOM_PIXEL);
+
+                      // measureInteraction({
+                      //   toMeasure: () => {
+                      //     Emitter.emit(EmitterEvents.DRAW_RANDOM_PIXEL);
+                      //   },
+                      //   setResult: setMeasurementResult
+                      // });
+                    }}
+                    type="button"
+            >
+              Draw Random Pixel
+            </button>
+          </ControlElement>
+
           <ControlElement title="Grid size:">
             <input id="gridSize"
                    name="gridSize"
@@ -116,14 +102,16 @@ const ControlPanel = () => {
                    style={{
                      margin: '4px',
                      width: 100,
-                     backgroundColor: 'red'
+                     backgroundColor: 'red',
+                     cursor: 'pointer'
                    }} />
             <input type="submit"
                    value="Apply"
                    style={{
                      margin: '4px',
                      width: 100,
-                     backgroundColor: 'green'
+                     backgroundColor: 'green',
+                     cursor: 'pointer'
                    }} />
           </ControlElement>
         </form>

@@ -5,6 +5,7 @@ import ControlPanel from './components/ControlPanel';
 
 import ContextApp from 'modules/ContextApp';
 import ZustandApp from 'modules/ZustandApp';
+
 // const ContextApp = lazy(() => import('modules/ContextApp'));
 // const ZustandApp = lazy(() => import('modules/ZustandApp'));
 
@@ -13,7 +14,7 @@ const renderSelectedExample = (option: AvailableStateManagerType, gridSize: numb
     case 'ContextAPI':
       return <ContextApp gridSize={gridSize}/>;
     case 'Zustand':
-      return <ZustandApp gridSize={gridSize}/>;
+      return <ZustandApp gridSize={gridSize} />;
     case 'Redux':
     case 'None':
     default:

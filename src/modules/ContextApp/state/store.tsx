@@ -51,6 +51,8 @@ const PixelProvider = ({ children }: { children: ReactNode }) => {
 
   const setPixelColor = (rowIndex: number, colIndex: number, color: string) => {
     setPixels((state) => {
+      if (state?.length === 0) return state;
+
       const row = [...state[rowIndex]];
       const resultRow = row.map((pixel, index) => {
         if (index === colIndex) {
