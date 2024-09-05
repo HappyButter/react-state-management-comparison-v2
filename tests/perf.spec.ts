@@ -1,5 +1,11 @@
 import { test, expect } from './pages/page';
 
+const repeat = async (fn: () => Promise<void>, times: number) => {
+  for (let i = 0; i < times; i++) {
+    await fn();
+  }
+};
+
 test.describe('Performance tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:3000/');
@@ -8,13 +14,18 @@ test.describe('Performance tests', () => {
   test('ContextAPI', async ({ mainPage }) => {
     await expect(mainPage.page).toHaveTitle(/ManageState/);
 
-    // Start measuring the performance.
-    // await page.evaluate(() => performance.mark('start'));
-    // Click the button.
+    await repeat(async () => {
+      await mainPage.fillConfigurations('ContextAPI', 100);
+      await mainPage.applyButton.click();
+      await mainPage.waitForPixels();
+      await mainPage.waitForMemoryResults();
+      await mainPage.resetButton.click();
+      await mainPage.waitForClearScreen();
 
-    await mainPage.fillConfigurations('ContextAPI', 300);
-    await mainPage.applyButton.click();
-    await mainPage.waitForPixels();
+      return Promise.resolve();
+    }, 10);
+
+    await mainPage.getConsoleLogResults();
 
     // const paintMetrics = await mainPage.page.evaluate(() => performance.getEntriesByType('paint'));
     // console.log('Paint Metrics:', paintMetrics);
@@ -26,26 +37,4 @@ test.describe('Performance tests', () => {
     //
     // longTaskObserver.observe({ type: 'longtask' });
   });
-
-  // test('Reset control panel', async ({ page }) => {
-  // Click the reset button.
-  // await page.click('text=Reset');
-
-  // get Reset input button
-  // const resetButton = page.locator('input[id="reset"]');
-  // await expect(resetButton).toBeVisible();
-
-  // get Reset input button from form with id "control-panel"
-
-  // });
 });
-
-// test('get started link', async ({ page }) => {
-//   await page.goto('https://playwright.dev/');
-//
-//   // Click the get started link.
-//   await page.getByRole('link', { name: 'Get started' }).click();
-//
-//   // Expects page to have a heading with the name of Installation.
-//   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
-// });

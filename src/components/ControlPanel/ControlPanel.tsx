@@ -8,6 +8,7 @@ import './styles.css';
 import { initAppConfig } from '../../state/initState.ts';
 import Emitter from '../../common/emitter.ts';
 import { EmitterEvents } from '../../common/emitter.ts';
+import { measureMemory } from '../../common/measureMemory.ts';
 
 
 function parseIntOrReturnValue(x: string): number | string {
@@ -21,7 +22,9 @@ function parseIntOrReturnValue(x: string): number | string {
 const ControlPanel = () => {
   const { setAppConfig } = useAppControl();
 
-  const [measurementResult, setMeasurementResult] = useState<number>(0);
+  const [timeMeasurementResult, setTimeMeasurementResult] = useState<number>(0);
+  const [memoryMeasurementResult, setMemoryMeasurementResult] = useState<number>(0);
+  const [memoryMeasurementResultAfterGC, setMemoryMeasurementResultAfterGC] = useState<number>(0);
   const formRef = useRef<HTMLFormElement>(null);
 
   return (
@@ -51,7 +54,11 @@ const ControlPanel = () => {
 
                   setAppConfig(result);
                 },
-                setResult: setMeasurementResult
+                setTimeResult: setTimeMeasurementResult,
+                setMemoryResult: (res1, res2) => {
+                  setMemoryMeasurementResult(res1);
+                  setMemoryMeasurementResultAfterGC(res2);
+                }
               });
             }
           }}>
@@ -63,6 +70,14 @@ const ControlPanel = () => {
                 </option>
               ))}
             </select>
+          </ControlElement>
+
+          <ControlElement title="Grid size:">
+            <input id="gridSize"
+                   name="gridSize"
+                   placeholder={initAppConfig.gridSize.toString()}
+                   style={{ textAlign: 'right' }}
+                   type="number" />
           </ControlElement>
 
           <ControlElement>
@@ -85,12 +100,18 @@ const ControlPanel = () => {
             </button>
           </ControlElement>
 
-          <ControlElement title="Grid size:">
-            <input id="gridSize"
-                   name="gridSize"
-                   placeholder={initAppConfig.gridSize.toString()}
-                   style={{ textAlign: 'right' }}
-                   type="number" />
+          <ControlElement>
+            <button data-testid="memorySnapshot"
+                    name="memorySnapshot"
+                    style={{ textAlign: 'right' }}
+                    onClick={async () => measureMemory().then(([res1, res2]) => {
+                      setMemoryMeasurementResult(res1);
+                      setMemoryMeasurementResultAfterGC(res2);
+                    })}
+                    type="button"
+            >
+              Memory Snapshot
+            </button>
           </ControlElement>
 
           <ControlElement>
@@ -98,6 +119,8 @@ const ControlPanel = () => {
                    value="Reset"
                    onClick={() => {
                      setAppConfig(initAppConfig);
+                     setMemoryMeasurementResult(0);
+                     setMemoryMeasurementResultAfterGC(0);
                    }}
                    style={{
                      margin: '4px',
@@ -130,7 +153,17 @@ const ControlPanel = () => {
         <h1 style={{ textAlign: 'center' }}>Results</h1>
 
         <div>
-          <p>Interaction took: {Math.round(measurementResult * 1000) / 1000} ms</p>
+          <p>Interaction took: {Math.round(timeMeasurementResult * 1000) / 1000} ms</p>
+        </div>
+        <div>
+          {memoryMeasurementResult ?
+            <p data-testid="memoryInUse">Memory in use: {memoryMeasurementResult} MB</p>
+            : null}
+        </div>
+        <div>
+          {memoryMeasurementResultAfterGC ?
+            <p data-testid="memoryInUseAfterGC">Memory in use after GC: {memoryMeasurementResultAfterGC} MB</p>
+            : null}
         </div>
 
       </div>

@@ -25,8 +25,7 @@ const App = ({ gridSize }: AppProps) => {
       measureInteraction({
         toMeasure: () => {
           setPixelColor(randomX, randomY, randomColor);
-        },
-        setResult: () => {}
+        }
       })
     });
 

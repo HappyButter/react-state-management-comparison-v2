@@ -1,4 +1,5 @@
 import afterFrame from 'afterframe';
+import { measureMemory } from './measureMemory.ts';
 
 const measureInteractionFactory = () => {
   // performance.now() returns the number of ms
@@ -15,21 +16,26 @@ const measureInteractionFactory = () => {
 
 type MeasurementResultProps = {
   toMeasure: () => void;
-  setResult: (result: number) => void;
+  setTimeResult?: (result: number) => void;
+  setMemoryResult?: (result1: number, result2: number) => void;
 }
 
 const measureInteraction = ({
   toMeasure = () => {},
-  setResult = () => {}
+  setTimeResult = () => {},
+  setMemoryResult = () => {},
 }: MeasurementResultProps) => {
   const interaction = measureInteractionFactory();
 
   toMeasure();
 
-  afterFrame(() => {
-    const res = interaction.end();
-    console.log('Interaction took', res, 'ms');
-    setResult(res);
+  afterFrame(async () => {
+    const timeRes = interaction.end();
+    console.log('Interaction took: ', timeRes, 'ms');
+    setTimeResult(timeRes);
+
+    const [res1, res2] = await measureMemory();
+    setMemoryResult(res1, res2);
   });
 };
 

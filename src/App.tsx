@@ -18,7 +18,7 @@ const renderSelectedExample = (option: AvailableStateManagerType, gridSize: numb
     case 'Redux':
     case 'None':
     default:
-      return <h1>None</h1>;
+      return <h1 data-testid="clear-screen">None</h1>;
   }
 };
 
