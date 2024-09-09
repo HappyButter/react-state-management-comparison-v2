@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-const ControlElement = ({ children, title }: { children: ReactNode, title?: string }) => {
+const ControlElement = ({ children, title }: { children: ReactNode, title?: string | ReactNode }) => {
   return (
     <div className="control-panel-element">
       <div>

@@ -1,14 +1,15 @@
 import { useRef, useState } from 'react';
-import { AppConfig, availableStateManagers } from 'types/global';
-import { useAppControl } from '../../state/AppControlContext';
 import ControlElement from './ControlElement';
-import { measureInteraction } from '../../common/measureInteraction.ts';
-
-import './styles.css';
+import DotLoader from '../DotLoader';
+import { useAppControl } from '../../state/AppControlContext';
 import { initAppConfig } from '../../state/initState.ts';
+import { measureInteraction } from '../../common/measureInteraction.ts';
 import Emitter from '../../common/emitter.ts';
 import { EmitterEvents } from '../../common/emitter.ts';
 import { measureMemory } from '../../common/measureMemory.ts';
+import { AppConfig, availableStateManagers } from 'types/global';
+
+import './styles.css';
 
 
 function parseIntOrReturnValue(x: string): number | string {
@@ -25,6 +26,7 @@ const ControlPanel = () => {
   const [timeMeasurementResult, setTimeMeasurementResult] = useState<number>(0);
   const [memoryMeasurementResult, setMemoryMeasurementResult] = useState<number>(0);
   const [memoryMeasurementResultAfterGC, setMemoryMeasurementResultAfterGC] = useState<number>(0);
+  const [isMeasuring, setIsMeasuring] = useState<boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   return (
@@ -40,6 +42,8 @@ const ControlPanel = () => {
             e.preventDefault();
 
             if (formRef && formRef.current) {
+              setIsMeasuring(true);
+
               measureInteraction({
                 toMeasure: () => {
                   const entries = new FormData(formRef.current ?? undefined).entries();
@@ -56,6 +60,7 @@ const ControlPanel = () => {
                 },
                 setTimeResult: setTimeMeasurementResult,
                 setMemoryResult: (res1, res2) => {
+                  setIsMeasuring(false);
                   setMemoryMeasurementResult(res1);
                   setMemoryMeasurementResultAfterGC(res2);
                 }
@@ -85,14 +90,18 @@ const ControlPanel = () => {
                     name="drawRandomPixel"
                     style={{ textAlign: 'right' }}
                     onClick={() => {
-                      Emitter.emit(EmitterEvents.DRAW_RANDOM_PIXEL);
-
-                      // measureInteraction({
-                      //   toMeasure: () => {
-                      //     Emitter.emit(EmitterEvents.DRAW_RANDOM_PIXEL);
-                      //   },
-                      //   setResult: setMeasurementResult
-                      // });
+                      setIsMeasuring(true);
+                      measureInteraction({
+                        toMeasure: () => {
+                          Emitter.emit(EmitterEvents.DRAW_RANDOM_PIXEL);
+                        },
+                        setTimeResult: setTimeMeasurementResult,
+                        setMemoryResult: (res1, res2) => {
+                          setIsMeasuring(false);
+                          setMemoryMeasurementResult(res1);
+                          setMemoryMeasurementResultAfterGC(res2);
+                        }
+                      });
                     }}
                     type="button"
             >
@@ -101,16 +110,12 @@ const ControlPanel = () => {
           </ControlElement>
 
           <ControlElement>
-            <button data-testid="memorySnapshot"
-                    name="memorySnapshot"
+            <button data-testid="swapRows"
+                    name="swapRows"
                     style={{ textAlign: 'right' }}
-                    onClick={async () => measureMemory().then(([res1, res2]) => {
-                      setMemoryMeasurementResult(res1);
-                      setMemoryMeasurementResultAfterGC(res2);
-                    })}
                     type="button"
             >
-              Memory Snapshot
+              Swap Rows
             </button>
           </ControlElement>
 
@@ -148,24 +153,57 @@ const ControlPanel = () => {
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        maxWidth: '100%'
+        maxWidth: '100%',
+        justifyContent: 'space-between'
       }}>
-        <h1 style={{ textAlign: 'center' }}>Results</h1>
+        <section>
+          <h1 style={{ textAlign: 'center' }}>Results</h1>
 
-        <div>
-          <p>Interaction took: {Math.round(timeMeasurementResult * 1000) / 1000} ms</p>
-        </div>
-        <div>
-          {memoryMeasurementResult ?
-            <p data-testid="memoryInUse">Memory in use: {memoryMeasurementResult} MB</p>
-            : null}
-        </div>
-        <div>
-          {memoryMeasurementResultAfterGC ?
-            <p data-testid="memoryInUseAfterGC">Memory in use after GC: {memoryMeasurementResultAfterGC} MB</p>
-            : null}
-        </div>
+          <div>
+            <p>Interaction took: {Math.round(timeMeasurementResult * 1000) / 1000} ms</p>
+          </div>
 
+          {!isMeasuring ? (
+            <>
+              <div>
+                {memoryMeasurementResult ?
+                  <p data-testid="memoryInUse">Memory in use: {memoryMeasurementResult} MB</p>
+                  : null}
+              </div>
+              <div>
+                {memoryMeasurementResultAfterGC ?
+                  <p data-testid="memoryInUseAfterGC">Memory in use after GC: {memoryMeasurementResultAfterGC} MB</p>
+                  : null}
+              </div>
+            </>
+          ) : null}
+
+        </section>
+
+        <section style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {isMeasuring ? <DotLoader /> : null}
+          <button data-testid="memorySnapshot"
+                  name="memorySnapshot"
+                  style={{ backgroundColor: '#006fff', margin: '8px', cursor: 'pointer' }}
+                  onClick={async () => {
+                    setIsMeasuring(true);
+
+                    measureMemory().then(([res1, res2]) => {
+                      setIsMeasuring(false);
+                      setMemoryMeasurementResult(res1);
+                      setMemoryMeasurementResultAfterGC(res2);
+                    });
+                  }}
+                  type="button"
+          >
+            Memory Snapshot
+          </button>
+        </section>
       </div>
     </menu>
   );
