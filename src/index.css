@@ -41,7 +41,7 @@ button {
   background-color: #484848;
   border: 0;
   border-radius: 4px;
-  padding: 5px 10px;
+  padding: 4px 8px;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 }
@@ -55,8 +55,7 @@ input {
   background-color: #484848;
   border: 0;
   border-radius: 4px;
-  padding: 5px 10px;
-
+  padding: 4px 8px;
 }
 
 /* Chrome, Safari, Edge, Opera */

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import ControlElement from './ControlElement';
 import DotLoader from '../DotLoader';
 import { useAppControl } from '../../state/AppControlContext';
@@ -28,6 +28,22 @@ const ControlPanel = () => {
   const [memoryMeasurementResultAfterGC, setMemoryMeasurementResultAfterGC] = useState<number>(0);
   const [isMeasuring, setIsMeasuring] = useState<boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
+
+  const emitAndMeasure = useCallback((emitterEvent: EmitterEvents) => {
+    setIsMeasuring(true);
+
+    measureInteraction({
+      toMeasure: () => {
+        Emitter.emit(emitterEvent);
+      },
+      setTimeResult: setTimeMeasurementResult,
+      setMemoryResult: (res1, res2) => {
+        setIsMeasuring(false);
+        setMemoryMeasurementResult(res1);
+        setMemoryMeasurementResultAfterGC(res2);
+      }
+    });
+  }, []);
 
   return (
     <menu id="control-panel-wrapper">
@@ -89,23 +105,21 @@ const ControlPanel = () => {
             <button data-testid="drawRandomPixel"
                     name="drawRandomPixel"
                     style={{ textAlign: 'right' }}
-                    onClick={() => {
-                      setIsMeasuring(true);
-                      measureInteraction({
-                        toMeasure: () => {
-                          Emitter.emit(EmitterEvents.DRAW_RANDOM_PIXEL);
-                        },
-                        setTimeResult: setTimeMeasurementResult,
-                        setMemoryResult: (res1, res2) => {
-                          setIsMeasuring(false);
-                          setMemoryMeasurementResult(res1);
-                          setMemoryMeasurementResultAfterGC(res2);
-                        }
-                      });
-                    }}
+                    onClick={() => emitAndMeasure(EmitterEvents.DRAW_RANDOM_PIXEL)}
                     type="button"
             >
               Draw Random Pixel
+            </button>
+          </ControlElement>
+
+          <ControlElement>
+            <button data-testid="drawRandomRow"
+                    name="drawRandomRow"
+                    style={{ textAlign: 'right' }}
+                    type="button"
+                    onClick={() => emitAndMeasure(EmitterEvents.DRAW_RANDOM_ROW)}
+            >
+              Draw Random Row
             </button>
           </ControlElement>
 
@@ -114,6 +128,7 @@ const ControlPanel = () => {
                     name="swapRows"
                     style={{ textAlign: 'right' }}
                     type="button"
+                    onClick={() => emitAndMeasure(EmitterEvents.SWAP_ROWS)}
             >
               Swap Rows
             </button>
@@ -124,11 +139,12 @@ const ControlPanel = () => {
                    value="Reset"
                    onClick={() => {
                      setAppConfig(initAppConfig);
+                     setTimeMeasurementResult(0);
                      setMemoryMeasurementResult(0);
                      setMemoryMeasurementResultAfterGC(0);
                    }}
                    style={{
-                     margin: '4px',
+                     margin: '0 4px',
                      width: 100,
                      backgroundColor: 'red',
                      cursor: 'pointer'
@@ -136,7 +152,7 @@ const ControlPanel = () => {
             <input type="submit"
                    value="Apply"
                    style={{
-                     margin: '4px',
+                     marginLeft: '4px',
                      width: 100,
                      backgroundColor: 'green',
                      cursor: 'pointer'

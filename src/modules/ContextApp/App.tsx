@@ -2,14 +2,15 @@ import { useEffect } from 'react';
 import { usePixelsContext } from './state/store';
 import PixelGrid from './components/PixelGrid';
 import Emitter, { EmitterEvents } from '../../common/emitter.ts';
-import { measureInteraction } from '../../common/measureInteraction.ts';
+
+const randomColor = 'red';
 
 type AppProps = {
   gridSize: number;
 };
 
 const App = ({ gridSize }: AppProps) => {
-  const { pixels, setupPixels, setPixelColor } = usePixelsContext();
+  const { pixels, setupPixels, setPixelColor, swapRows, setPixelRowColor } = usePixelsContext();
 
   useEffect(() => {
     setupPixels(gridSize);
@@ -21,16 +22,28 @@ const App = ({ gridSize }: AppProps) => {
 
       const randomX = Math.floor(Math.random() * pixels.length);
       const randomY = Math.floor(Math.random() * pixels.length);
-      const randomColor = 'red';
-      measureInteraction({
-        toMeasure: () => {
-          setPixelColor(randomX, randomY, randomColor);
-        }
-      })
+      setPixelColor(randomX, randomY, randomColor);
+    });
+
+    Emitter.on(EmitterEvents.SWAP_ROWS, () => {
+      if (!pixels?.length) return;
+
+      const randomRow = Math.floor(Math.random() * (pixels.length - 1));
+      swapRows(randomRow, randomRow + 1);
+    });
+
+    Emitter.on(EmitterEvents.DRAW_RANDOM_ROW, () => {
+      if (!pixels?.length) return;
+
+      const randomRow = Math.floor(Math.random() * pixels.length);
+
+      setPixelRowColor(randomRow, randomColor);
     });
 
     return () => {
       Emitter.removeListener(EmitterEvents.DRAW_RANDOM_PIXEL);
+      Emitter.removeListener(EmitterEvents.SWAP_ROWS);
+      Emitter.removeListener(EmitterEvents.DRAW_RANDOM_ROW);
     };
   }, [pixels]);
 
@@ -38,9 +51,9 @@ const App = ({ gridSize }: AppProps) => {
   if (pixels?.length !== gridSize) return (<div>Calculating...</div>);
 
   return (
-    <div>
+    <>
       <PixelGrid size={pixels.length} />
-    </div>
+    </>
   );
 };
 

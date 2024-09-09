@@ -11,6 +11,8 @@ type ContextState = {
 type ContextActions = {
   setupPixels: (size: number) => void
   setPixelColor: (x: number, y: number, color: string) => void
+  setPixelRowColor: (row: number, color: string) => void
+  swapRows: (row1: number, row2: number) => void
 }
 
 const getPixelColor = (rowIndex: number, colIndex: number) => {
@@ -30,6 +32,10 @@ const initialActions: ContextActions = {
   setupPixels: () => {
   },
   setPixelColor: () => {
+  },
+  swapRows: () => {
+  },
+  setPixelRowColor: () => {
   }
 };
 
@@ -53,22 +59,50 @@ const PixelProvider = ({ children }: { children: ReactNode }) => {
     setPixels((state) => {
       if (state?.length === 0) return state;
 
-      const row = [...state[rowIndex]];
-      const resultRow = row.map((pixel, index) => {
-        if (index === colIndex) {
-          return { color };
-        }
-        return pixel;
-      });
+      const newState = state.slice();
+      const pixel = newState[rowIndex][colIndex];
+      pixel.color = color;
 
-      return [...state.slice(0, rowIndex), resultRow, ...state.slice(rowIndex + 1)];
+      return newState;
+    });
+  };
+
+  const swapRows = (row1: number, row2: number) => {
+    setPixels((state) => {
+      if (state?.length === 0) return state;
+      if (row1 < 0 || row1 >= state.length || row2 < 0 || row2 >= state.length) return state;
+
+      const newState = state.slice();
+
+      const temp = newState[row1];
+      newState[row1] = newState[row2];
+      newState[row2] = temp;
+
+      return newState;
+    });
+  };
+
+  const setPixelRowColor = (rowIndex: number, color: string) => {
+    setPixels((state) => {
+      if (state?.length === 0) return state;
+
+      const newState = state.slice();
+      const row = newState[rowIndex];
+
+      for(let i = 0; i < row.length; i++) {
+        row[i].color = color;
+      }
+
+      return newState;
     });
   };
 
   const state = {
     pixels,
     setupPixels,
-    setPixelColor
+    setPixelColor,
+    swapRows,
+    setPixelRowColor
   };
 
   return (

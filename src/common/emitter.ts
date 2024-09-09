@@ -14,4 +14,6 @@ export default Emitter;
 
 export enum EmitterEvents {
   DRAW_RANDOM_PIXEL = 'DRAW_RANDOM_PIXEL',
+  DRAW_RANDOM_ROW = 'DRAW_RANDOM_ROW',
+  SWAP_ROWS = 'SWAP_ROWS',
 }

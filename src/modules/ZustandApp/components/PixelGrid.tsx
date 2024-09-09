@@ -6,7 +6,7 @@ type PixelGridProps = {
 };
 
 const styles: CSSProperties = {
-  height: '70vh',
+  height: '65vh',
   aspectRatio: '1/1',
   display: 'flex',
   flexDirection: 'column',
