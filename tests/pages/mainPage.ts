@@ -30,9 +30,11 @@ export const MainPage = (page: Page) => {
     console.log(msg.text());
   });
 
-
   const applyButton = page.getByText('Apply');
   const resetButton = page.getByRole('button', { name: 'Reset' });
+  const drawRandomPixelButton = page.getByRole('button', { name: 'Draw Random Pixel' });
+  const drawRandomRowButton = page.getByRole('button', { name: 'Draw Random Row' });
+  const swapRowsButton = page.getByRole('button', { name: 'Swap Rows' });
 
   const fillConfigurations = async (stateManager: StateManagerType, gridSize: number) => {
     await page.selectOption('select[name="selectedStateManager"]', stateManager);
@@ -52,21 +54,35 @@ export const MainPage = (page: Page) => {
   };
 
   const getConsoleLogResults = async () => {
-    // await page.waitForTimeout(7000);
-    //
     console.log("timeResultsArray: ", timeResultsArray);
     console.log("memResultsArray: ", memResultsArray);
     console.log("memAfterGCResultsArray: ", memAfterGCResultsArray);
   };
 
+  const popLogResults = () => {
+    const timeResults = timeResultsArray.splice(0, timeResultsArray.length);
+    const memResults = memResultsArray.splice(0, memResultsArray.length);
+    const memAfterGCResults = memAfterGCResultsArray.splice(0, memAfterGCResultsArray.length);
+
+    return {
+      timeResults,
+      memResults,
+      memAfterGCResults
+    };
+  }
+
   return {
     page,
     applyButton,
     resetButton,
+    drawRandomPixelButton,
+    drawRandomRowButton,
+    swapRowsButton,
     fillConfigurations,
     waitForPixels,
     waitForMemoryResults,
     waitForClearScreen,
-    getConsoleLogResults
+    getConsoleLogResults,
+    popLogResults
   };
 };
