@@ -21,7 +21,6 @@ const getPixelColor = (rowIndex: number, colIndex: number) => {
   return isEvenRow ?
     isEvenCol ? 'blue' : 'pink' :
     isEvenCol ? 'green' : 'yellow';
-
 };
 
 export const usePixelsStore = create<ZustandState & ZustandActions>((set) => ({
