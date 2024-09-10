@@ -53,10 +53,16 @@ export const MainPage = (page: Page) => {
     await page.waitForSelector('h1[data-testid="clear-screen"]');
   };
 
-  const getConsoleLogResults = async () => {
+  const getConsoleLogResults = () => {
     console.log("timeResultsArray: ", timeResultsArray);
     console.log("memResultsArray: ", memResultsArray);
     console.log("memAfterGCResultsArray: ", memAfterGCResultsArray);
+
+    return {
+      timeResultsArray,
+      memResultsArray,
+      memAfterGCResultsArray
+    };
   };
 
   const popLogResults = () => {
