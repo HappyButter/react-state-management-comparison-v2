@@ -11,7 +11,7 @@
     "dev": "vite --open",
     "test:prerun": "npm run build && npm run serve",
     "test:ui": "playwright test --config=playwright.config.ts --ui",
-    "test": "playwright test --config=playwright.config.ts --workers=1"
+    "test": "playwright test --config=playwright.config.ts"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.6",
@@ -19,6 +19,8 @@
     "chart.js": "^3.5.1",
     "chartjs-node-canvas": "^4.1.6",
     "eventemitter3": "^5.0.1",
+    "mobx-react-lite": "^4.0.7",
+    "proper-lockfile": "^4.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.50.1",
@@ -30,6 +32,7 @@
     "@playwright/test": "^1.43.1",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/node": "^20.12.7",
+    "@types/proper-lockfile": "^4.1.4",
     "@types/react": "^18.2.41",
     "@types/react-dom": "^18.2.17",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
@@ -39,7 +42,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "prettier": "3.1.0",
-    "typescript": "5.3.2",
+    "typescript": "^5.3.2",
     "vite": "^5.2.12"
   }
 }

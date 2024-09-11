@@ -36,6 +36,9 @@ export const MainPage = (page: Page) => {
   const drawRandomRowButton = page.getByRole('button', { name: 'Draw Random Row' });
   const swapRowsButton = page.getByRole('button', { name: 'Swap Rows' });
 
+  const reload = async () => await page.reload();
+
+
   const fillConfigurations = async (stateManager: StateManagerType, gridSize: number) => {
     await page.selectOption('select[name="selectedStateManager"]', stateManager);
     await page.fill('input[name="gridSize"]', gridSize.toString());
@@ -84,6 +87,7 @@ export const MainPage = (page: Page) => {
     drawRandomPixelButton,
     drawRandomRowButton,
     swapRowsButton,
+    reload,
     fillConfigurations,
     waitForPixels,
     waitForMemoryResults,

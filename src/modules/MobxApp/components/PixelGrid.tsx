@@ -13,16 +13,16 @@ const styles: CSSProperties = {
   border: '1px solid black',
 };
 
-const PixelGrid = ({size}: PixelGridProps) => {
+const PixelGrid = ({ size }: PixelGridProps) => {
   return (
     <div style={{ ...styles }} data-testid="pixel-grid">
       {Array(size)
         .fill(null)
         .map((_, rowIndex) => (
-          <PixelRow key={`PixelRow_${rowIndex}`} rowIndex={rowIndex} size={size}/>
+          <PixelRow key={`PixelRow_${rowIndex}`} rowIndex={rowIndex} size={size} />
         ))}
     </div>
   );
-}
+};
 
 export default PixelGrid;
