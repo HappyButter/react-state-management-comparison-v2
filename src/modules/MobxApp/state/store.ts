@@ -1,4 +1,3 @@
-// src/modules/MobXApp/state/store.ts
 import { makeAutoObservable } from 'mobx';
 
 class PixelStore {

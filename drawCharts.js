@@ -16,12 +16,10 @@ function readJSONData(dir) {
   return null;
 }
 
-// const folder = 'results-time';
-// const folder = 'results-memory';
-const folder = 'results-memory-after-gc';
+const folders = ['results-memory-after-gc', 'results-memory', 'results-time'];
 
 // Function to walk through all folders with the structure `./results-time/*/*/`
-async function walkThroughFolders() {
+async function walkThroughFolders(folder) {
   const baseDir = path.join(__dirname, folder);
   const firstLevelDirs = fs.readdirSync(baseDir).filter(file => fs.statSync(path.join(baseDir, file)).isDirectory());
 
@@ -31,14 +29,24 @@ async function walkThroughFolders() {
     for (const secondLevelDir of secondLevelDirs) {
       const targetDir = path.join(baseDir, firstLevelDir, secondLevelDir);
       const jsonData = readJSONData(targetDir);
+
       if (jsonData) {
         const { title, chartData, dataLabels } = jsonData;
-        await generateChart2(targetDir, title, chartData, dataLabels);
+        await generateChart2(
+          targetDir,
+          title,
+          chartData,
+          dataLabels,
+          folder === 'results-time'
+        );
       }
     }
   }
 }
 
 // Main function to execute the process
-await walkThroughFolders();
+async function main() {
+  for (const folder of folders) await walkThroughFolders(folder);
+}
 
+await main();

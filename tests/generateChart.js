@@ -24,7 +24,7 @@ const createChartData = (data, dataLabels) => {
   };
 };
 
-const createChartConfig = (title, data, dataLabels) => {
+const createChartConfig = (title, data, dataLabels, isTimeChart=true) => {
   return {
     type: 'line',
     data: createChartData(data, dataLabels),
@@ -34,7 +34,7 @@ const createChartConfig = (title, data, dataLabels) => {
           beginAtZero: true,
           title: {
             display: true,
-            text: 'Memory used (MB)'
+            text: isTimeChart ? 'Duration (ms)' : 'Memory used (MB)'
           }
         },
         x: {
@@ -57,7 +57,7 @@ const createChartConfig = (title, data, dataLabels) => {
   };
 };
 
-const width = 800;
+const width = 900;
 const height = 600;
 const chartCallback = () => {
 };
@@ -76,10 +76,10 @@ const generateChart = async (title, results, dataLabels) => {
 };
 
 
-const generateChart2 = async (path, title, results, dataLabels) => {
+const generateChart2 = async (path, title, results, dataLabels, isTimeChart) => {
   const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, chartCallback });
 
-  const configuration = createChartConfig(title, results, dataLabels);
+  const configuration = createChartConfig(title, results, dataLabels, isTimeChart);
 
   // Render chart as PNG
   const image = await chartJSNodeCanvas.renderToBuffer(configuration);
