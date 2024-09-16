@@ -1,9 +1,9 @@
 import afterFrame from 'afterframe';
 import { measureMemory } from './measureMemory.ts';
 
+// end() returns the number of ms
+// elapsed since the page was opened
 const measureInteractionFactory = () => {
-  // performance.now() returns the number of ms
-  // elapsed since the page was opened
   const startTimestamp = performance.now();
 
   return {
@@ -30,12 +30,12 @@ const measureInteraction = ({
   toMeasure();
 
   afterFrame(async () => {
-    const timeRes = interaction.end();
-    console.log('Interaction took: ', timeRes, 'ms');
-    setTimeResult(timeRes);
+    const timeResult = interaction.end();
+    console.log('Interaction took: ', timeResult, 'ms');
+    setTimeResult(timeResult);
 
-    const [res1, res2] = await measureMemory();
-    setMemoryResult(res1, res2);
+    const [memoryInUse, memoryInUseAfterGC] = await measureMemory();
+    setMemoryResult(memoryInUse, memoryInUseAfterGC);
   });
 };
 

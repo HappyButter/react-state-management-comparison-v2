@@ -15,38 +15,8 @@ const availableStateManagers: StateManagerType[] = ['ContextAPI', 'Zustand', 'Re
 const gridSizes = [10, 100, 200, 300];
 
 
-// let aggregatedResultsByTestType: AggregatedResultsByTestType = {
-//   mount: {},
-//   drawRandomPixel: {},
-//   drawRandomRow: {},
-//   swapRows: {}
-// };
-// type TestType = 'mount' | 'drawRandomPixel' | 'drawRandomRow' | 'swapRows';
-
-// const appendResults = (testType: TestType, gridSize: number, title: string, dataLabel: string, chartData: number[]) => {
-//   if (!aggregatedResultsByTestType[testType][gridSize]) {
-//     aggregatedResultsByTestType[testType][gridSize] = {
-//       title,
-//       dataLabels: [],
-//       chartData: []
-//     };
-//   }
-//
-//   aggregatedResultsByTestType[testType][gridSize].dataLabels.push(dataLabel);
-//   aggregatedResultsByTestType[testType][gridSize].chartData.push(chartData);
-// };
 
 test.describe('Save results to JSON', async () => {
-  // test.beforeEach(async () => {
-  //   console.log('Before each test');
-
-    // aggregatedResultsByTestType = {
-    //   mount: {},
-    //   drawRandomPixel: {},
-    //   drawRandomRow: {},
-    //   swapRows: {}
-    // };
-  // });
 
   for (const stateManager of availableStateManagers) {
     test.describe(`Performance tests for ${stateManager}`, () => {
@@ -75,10 +45,10 @@ test.describe('Save results to JSON', async () => {
           const chartTimeData: number[][] = [chartData.timeResults];
           const chartMemData: number[][] = [chartData.memResults];
           const chartMemAfterGCData: number[][] = [chartData.memAfterGCResults];
-          const dataLabels: string[] = [testTitle];
+          // const dataLabels: string[] = [testTitle];
 
-          const currentChartTitle = `${stateManager} - ${testTitle}`;
-          await generateChart(currentChartTitle, chartTimeData, dataLabels);
+          // const currentChartTitle = `${stateManager} - ${testTitle}`;
+          // await generateChart(currentChartTitle, chartTimeData, dataLabels);
 
           saveToJson2(`./results-time/mount/${gridSize}/${stateManager}.json`, {
             testTitle,
@@ -97,8 +67,6 @@ test.describe('Save results to JSON', async () => {
             chartData: chartMemAfterGCData[0],
             dataLabel: stateManager
           });
-
-          // appendResults('mount', gridSize, testTitle, stateManager, chartData[0]);
         });
       }
 
@@ -148,8 +116,6 @@ test.describe('Save results to JSON', async () => {
             chartData: chartMemAfterGCData[0],
             dataLabel: stateManager
           });
-
-          // appendResults('drawRandomPixel', gridSize, testTitle, stateManager, chartData[0]);
         });
       }
 
@@ -199,8 +165,6 @@ test.describe('Save results to JSON', async () => {
             chartData: chartMemAfterGCData[0],
             dataLabel: stateManager
           });
-
-          // appendResults('drawRandomRow', gridSize, testTitle, stateManager, chartData[0]);
         });
       }
 
@@ -250,26 +214,8 @@ test.describe('Save results to JSON', async () => {
             chartData: chartMemAfterGCData[0],
             dataLabel: stateManager
           });
-
-          // appendResults('swapRows', gridSize, testTitle, stateManager, chartData[0]);
         });
       }
     });
   }
-
-  // test.afterEach(async () => {
-  //   console.log('All tests finished. Saving results to JSON...');
-
-  // const testTypes = Object.keys(aggregatedResultsByTestType);
-  // for (const testType of testTypes) {
-  //   await saveResultsToJson(aggregatedResultsByTestType[testType], `./results-${testType}.json`);
-  // }
-
-  // for (const testType in aggregatedResultsByTestType) {
-  //   for (const gridSize in aggregatedResultsByTestType[testType]) {
-  //     const { title, dataLabels, chartData } = aggregatedResultsByTestType[testType][gridSize];
-  //     await generateChart(title, chartData, dataLabels);
-  //   }
-  // }
-  // });
 });

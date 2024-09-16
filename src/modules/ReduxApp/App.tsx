@@ -32,7 +32,7 @@ const App = ({ gridSize }: AppProps) => {
       if (!pixels?.length) return;
 
       const randomRow = Math.floor(Math.random() * (pixels.length - 1));
-      dispatch(swapRows({ row1: randomRow, row2: randomRow }));
+      dispatch(swapRows({ row1: randomRow, row2: randomRow + 1 }));
     });
 
     Emitter.on(EmitterEvents.DRAW_RANDOM_ROW, () => {
