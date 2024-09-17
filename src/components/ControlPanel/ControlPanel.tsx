@@ -84,7 +84,20 @@ const ControlPanel = () => {
             }
           }}>
           <ControlElement title="State Manager:">
-            <select name="selectedStateManager">
+            <select name="selectedStateManager" style={ {
+              fontFamily: "inherit",
+              fontSize: "inherit",
+              fontWeight: "inherit",
+              lineHeight: "inherit",
+              color: "#0d1117",
+              backgroundColor: "#fff",
+              border: "0",
+              borderRadius: "4px",
+              padding: "4px 8px",
+              cursor: "pointer",
+              transition: "background-color 0.2s ease-in-out"
+            }
+            }>
               {availableStateManagers.map((stateManager) => (
                 <option value={stateManager} key={stateManager}>
                   {stateManager}
@@ -145,6 +158,7 @@ const ControlPanel = () => {
                    }}
                    style={{
                      margin: '0 4px',
+                     color: '#FFF',
                      width: 100,
                      backgroundColor: 'red',
                      cursor: 'pointer'
@@ -153,6 +167,7 @@ const ControlPanel = () => {
                    value="Apply"
                    style={{
                      marginLeft: '4px',
+                     color: '#FFF',
                      width: 100,
                      backgroundColor: 'green',
                      cursor: 'pointer'
@@ -205,7 +220,7 @@ const ControlPanel = () => {
           {isMeasuring ? <DotLoader /> : null}
           <button data-testid="memorySnapshot"
                   name="memorySnapshot"
-                  style={{ backgroundColor: '#006fff', margin: '8px', cursor: 'pointer' }}
+                  style={{ backgroundColor: '#006fff', color: '#FFF', margin: '8px', cursor: 'pointer' }}
                   onClick={async () => {
                     setIsMeasuring(true);
 
