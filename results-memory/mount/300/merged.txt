@@ -1,0 +1,12 @@
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multicolumn{5}{|c|}{Mount - grid 300x300} \\
+\hline
+Size & ContextAPI & MobX & Redux & Zustand \\
+\hline
+300 & 261.80443 & 275.07793753333334 \\
+300 & 814.770946 & 848.2255020999999 \\
+300 & 684.453135 & 679.9325927333333 \\
+300 & 714.6075945 & 750.9706909999999 \\
+\hline
+\end{tabular}

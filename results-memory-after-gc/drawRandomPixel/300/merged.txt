@@ -1,0 +1,12 @@
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multicolumn{5}{|c|}{Draw random pixel - grid 300x300} \\
+\hline
+Size & ContextAPI & MobX & Redux & Zustand \\
+\hline
+300 & 98.767559 & 98.61350027586208 \\
+300 & 169.9616825 & 170.53588553333336 \\
+300 & 681.441747 & 707.6364202333334 \\
+300 & 483.5514795 & 528.5284389000001 \\
+\hline
+\end{tabular}

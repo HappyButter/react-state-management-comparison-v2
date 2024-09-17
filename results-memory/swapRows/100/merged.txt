@@ -1,0 +1,12 @@
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multicolumn{5}{|c|}{Swap rows - grid 100x100} \\
+\hline
+Size & ContextAPI & MobX & Redux & Zustand \\
+\hline
+100 & 15.5690375 & 15.874643600000004 \\
+100 & 38.038391000000004 & 37.75063082142857 \\
+100 & 49.501889500000004 & 49.458245107142865 \\
+100 & 41.569767 & 40.13275699999999 \\
+\hline
+\end{tabular}

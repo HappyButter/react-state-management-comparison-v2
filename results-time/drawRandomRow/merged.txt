@@ -1,0 +1,25 @@
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Rozmiar macierzy & ContextAPI & MobX & Redux & Zustand \\
+\hline
+10 & 7.54 & 7.42 & 7.55 & 7.46 \\\hline
+100 & 19.05 & 12.67 & 30.12 & 27.18 \\\hline
+300 & 141.67 & 82.45 & 266.38 & 279.88 \\\hline
+\end{tabular}
+\captionof{table}{Średnia.}
+\end{table}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Rozmiar macierzy & ContextAPI & MobX & Redux & Zustand \\
+\hline
+10 & 7.6 & 7.5 & 7.55 & 7.2 \\\hline
+100 & 18.9 & 12.7 & 29.4 & 25.5 \\\hline
+300 & 140.9 & 82.1 & 259.5 & 295.3 \\\hline
+\end{tabular}
+\captionof{table}{Mediana.}
+\end{table}

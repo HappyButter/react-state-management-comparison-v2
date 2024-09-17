@@ -1,0 +1,22 @@
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+Rozmiar macierzy & Miara & \multicolumn{4}{c|}{Wartości} \\ \cline{3-6}
+& & ContextAPI & MobX & Redux & Zustand \\
+\hline
+10
+& Średnia & 4.75 & 5.81 & 5.28 & 5.18 \\ \cline{2-6}
+& Mediana & 4.72 & 5.75 & 5.29 & 5.14 \\
+\hline
+100
+& Średnia & 34.6 & 59.13 & 56.72 & 57.83 \\ \cline{2-6}
+& Mediana & 35.21 & 61.55 & 56.95 & 62.8 \\
+\hline
+300
+& Średnia & 275.08 & 848.23 & 679.93 & 750.97 \\ \cline{2-6}
+& Mediana & 261.8 & 814.77 & 684.45 & 714.61 \\
+\hline
+\end{tabular}
+\caption{Porównanie Średniej i Mediany dla różnych rozmiarów macierzy.}
+\end{table}

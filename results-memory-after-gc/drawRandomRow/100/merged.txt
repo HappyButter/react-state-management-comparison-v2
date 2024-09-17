@@ -1,0 +1,12 @@
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multicolumn{5}{|c|}{Draw random row - grid 100x100} \\
+\hline
+Size & ContextAPI & MobX & Redux & Zustand \\
+\hline
+100 & 16.787535 & 17.071783033333336 \\
+100 & 23.7023365 & 23.738360533333335 \\
+100 & 39.566301 & 39.598370499999994 \\
+100 & 34.0353085 & 34.09413228571428 \\
+\hline
+\end{tabular}
